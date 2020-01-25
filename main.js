@@ -1,34 +1,65 @@
-
-allPieces = makePieces();
+var allPieces = makePieces();
 
 //Main function
-function run(){
-    makeBoard();
+function initialize() {
 
-    showPieces(allPieces);
-    
+    //Game loop
+    var loop = function() {
+        //Draw the board and pieces
+        makeBoard();
+        showPieces();
+
+        //If we're holding a piece, then pick that piece up
+        if (holdingPiece) {
+            allPieces[pieceIndex].pickUp(mouseX, mouseY);
+        }
+    }
+
+    //Start the game loop
+    var interval = setInterval(loop, 10);
 }
+//When the page loads, start the initialize function
+document.onload = initialize();
 
-//Click Event
+
+//Function to track the mouse position
+canvas.addEventListener("mousemove", function(event) {
+    mouseX = event.clientX;
+    mouseY = event.clientY;
+}, false);
+
+//Function to track the mouse clicks
 canvas.addEventListener('click', function(event){
-    var x = event.pageX - canvasLeft;
-    var y = event.pageY - canvasTop;
 
     //Get which square the user clicked on
-    var xPos = Math.floor(x / squareSize);
-    var yPos = Math.floor(y / squareSize);
+    var xPos = Math.floor(mouseX / squareSize);
+    var yPos = Math.floor(mouseY / squareSize);
 
-    //For all of the pieces
-    for (var i = 0; i < allPieces.length; i++){
-        //if the piece doesn't exist, move on
-        if (!allPieces[i].exists){
-            continue;
+    //If we are not holding a piece right now
+    if (!holdingPiece) {
+        //For all of the pieces
+        for (var i = 0; i < allPieces.length; i++){
+            //if the piece doesn't exist, move on
+            if (!allPieces[i].exists){
+                continue;
+            }
+            //Otherwise, if the piece's position has been clicked on
+            var piecePos = allPieces[i].getSquare();
+            if (piecePos[0] == xPos && piecePos[1] == yPos){
+                //console.log("Clicked on a piece at position " + xPos + ", " + yPos);
+                //Say we're holding a piece and keep track of which piece we're holding
+                pieceIndex = i;
+                holdingPiece = true;
+            }
         }
-        //Otherwise, if the pieces position has been clicked on
-        var piecePos = allPieces[i].getSquare();
-        if (piecePos[0] == xPos && piecePos[1] == yPos){
-            console.log("Clicked on a piece " + allPieces[i].text + " at position " + xPos + ", " + yPos);
-        }
+    }
+    else {
+        //Set the piece down at the correct position
+        allPieces[pieceIndex].setDown(xPos, yPos);
+
+        //Say that we are no longer holding a piece and reset the index
+        holdingPiece = false;
+        pieceIndex = -1;
     }
 
 }, false);
@@ -36,13 +67,24 @@ canvas.addEventListener('click', function(event){
 
 //Creates the board and draws it
 function makeBoard(){
+    //Makes the background
+    ctx.fillStyle = "rgb(51, 51, 51)";
+    ctx.fillRect(0, 0, WIDTH, WIDTH);
+
     //Creates the checker grid
     for (var i = 0; i < numSquare; i++){
         for (var j = 0; j < numSquare; j++){
-            ctx.fillStyle = BLACK;
-            if ((i + j) % 2 == 0){
-                ctx.fillRect(i * squareSize, j * squareSize, squareSize, squareSize);
+            // ctx.fillStyle = BLACK;
+            // if ((i + j) % 2 == 0){
+            //     ctx.fillRect(i * squareSize, j * squareSize, squareSize, squareSize);
+            // }
+            if ((i + j) % 2 == 0) {
+                ctx.fillStyle = BLACK;
             }
+            else {
+                ctx.fillStyle = WHITE;
+            }
+            ctx.fillRect(i * squareSize, j * squareSize, squareSize, squareSize);
         }
     }
     
@@ -90,12 +132,11 @@ function makePieces(){
 }
 
 //Shows all of the pieces if they exists in the gamestate
-function showPieces(pieces){
-    for (var i = 0; i < pieces.length; i++){
-        if (pieces[i].exists){
-            pieces[i].show();
+function showPieces(){
+    for (var i = 0; i < allPieces.length; i++){
+        if (allPieces[i].exists){
+            allPieces[i].show();
         }
     }
 }
 
-run();
