@@ -1,13 +1,37 @@
 
+allPieces = makePieces();
+
 //Main function
 function run(){
     makeBoard();
 
-    allPieces = makePieces();
-
     showPieces(allPieces);
     
 }
+
+//Click Event
+canvas.addEventListener('click', function(event){
+    var x = event.pageX - canvasLeft;
+    var y = event.pageY - canvasTop;
+
+    //Get which square the user clicked on
+    var xPos = Math.floor(x / squareSize);
+    var yPos = Math.floor(y / squareSize);
+
+    //For all of the pieces
+    for (var i = 0; i < allPieces.length; i++){
+        //if the piece doesn't exist, move on
+        if (!allPieces[i].exists){
+            continue;
+        }
+        //Otherwise, if the pieces position has been clicked on
+        var piecePos = allPieces[i].getSquare();
+        if (piecePos[0] == xPos && piecePos[1] == yPos){
+            console.log("Clicked on a piece " + allPieces[i].text + " at position " + xPos + ", " + yPos);
+        }
+    }
+
+}, false);
 
 
 //Creates the board and draws it

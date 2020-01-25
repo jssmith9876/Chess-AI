@@ -28,6 +28,10 @@ class Piece {
         ctx.fillText(this.text, this.xpos, this.ypos);
         ctx.strokeText(this.text, this.xpos, this.ypos);
     }
+
+    getSquare() {
+        return [Math.floor(this.xpos / squareSize), Math.floor(this.ypos / squareSize)];
+    }
 }
 
 //King piece
@@ -57,7 +61,7 @@ class Rook extends Piece {
 //Bishop Piece
 class Bishop extends Piece {
     show() {
-        super.text = "R";
+        super.text = "B";
         super.show();
     }
 }
@@ -65,7 +69,7 @@ class Bishop extends Piece {
 //Knight Piece
 class Knight extends Piece {
     show() {
-        super.text = "I";
+        super.text = "N";
         super.show();
     }
 }

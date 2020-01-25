@@ -7,6 +7,8 @@ const BLACK = "black";
 const WHITE = "white";
 const squareSize = WIDTH / 10;
 const pieceSize = 60;
+const canvasLeft = canvas.offsetLeft;
+const canvasTop = canvas.offsetTop;
 
 //Make the position matrix
 const positions = [];
