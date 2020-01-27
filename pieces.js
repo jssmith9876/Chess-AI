@@ -51,6 +51,8 @@ class King extends Piece {
         
         super.image = image;
     }
+    
+
 }
 
 //Queen Piece

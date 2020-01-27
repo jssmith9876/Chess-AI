@@ -54,12 +54,14 @@ canvas.addEventListener('click', function(event){
         }
     }
     else {
-        //Set the piece down at the correct position
-        allPieces[pieceIndex].setDown(xPos, yPos);
+        if (!pieceThere(xPos, yPos)) {
+            //Set the piece down at the correct position
+            allPieces[pieceIndex].setDown(xPos, yPos);
 
-        //Say that we are no longer holding a piece and reset the index
-        holdingPiece = false;
-        pieceIndex = -1;
+            //Say that we are no longer holding a piece and reset the index
+            holdingPiece = false;
+            pieceIndex = -1;
+        }
     }
 
 }, false);
@@ -138,5 +140,18 @@ function showPieces(){
             allPieces[i].show();
         }
     }
+}
+
+//Function to check if a piece exists on a space
+/*------------DOESN'T WORK------------*/
+function pieceThere(xSpace, ySpace){
+    for (var i = 0; i < allPieces.length; i++){
+        var piecePosition = allPieces[i].getSquare();
+        if (piecePosition[0] == xSpace && piecePosition[1] == ySpace) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
