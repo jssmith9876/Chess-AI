@@ -8,6 +8,13 @@ class Piece {
         this.color = color;
         this.exists = true;
         this.image = null;
+
+        //Tells the board that a piece is there
+        var gridX = Math.floor(xpos / squareSize),
+            gridY = Math.floor(ypos / squareSize);
+            
+        gameBoard.setPiece(gridX, gridY);
+        
     }
     //Shows the piece
     show() {
@@ -24,12 +31,22 @@ class Piece {
         //The coordinates need to account for the size of the piece
         this.xpos = mouseX - pieceSize / 2;
         this.ypos = mouseY - pieceSize / 2;
+
+        //Changes the board state
+        var gridX = Math.floor(mouseX / squareSize),
+            gridY = Math.floor(mouseY / squareSize);
+
+        gameBoard.takePiece(gridX, gridY);
     }
 
     //Puts the piece down in the correct space
     setDown(gridX, gridY){
         this.xpos = positions[gridX][gridY].x;
         this.ypos = positions[gridX][gridY].y;
+
+        //Changes the board state
+        gameBoard.setPiece(gridX, gridY);
+        
     }
 
 }

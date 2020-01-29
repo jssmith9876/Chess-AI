@@ -1,7 +1,13 @@
+/*
+    TODO: Game board is not updating when piece is set down
+*/
+
 var allPieces = makePieces();
 
 //Main function
 function initialize() {
+
+    gameBoard.showBoardState();
 
     //Game loop
     var loop = function() {
@@ -54,13 +60,17 @@ canvas.addEventListener('click', function(event){
         }
     }
     else {
-        if (!pieceThere(xPos, yPos)) {
+        gameBoard.showBoardState();
+        console.log(gameBoard.pieceAt(xPos, yPos));
+        if (!gameBoard.pieceAt(xPos, yPos)) {
             //Set the piece down at the correct position
             allPieces[pieceIndex].setDown(xPos, yPos);
 
             //Say that we are no longer holding a piece and reset the index
             holdingPiece = false;
             pieceIndex = -1;
+
+            //gameBoard.showBoardState();
         }
     }
 
@@ -144,14 +154,4 @@ function showPieces(){
 
 //Function to check if a piece exists on a space
 /*------------DOESN'T WORK------------*/
-function pieceThere(xSpace, ySpace){
-    for (var i = 0; i < allPieces.length; i++){
-        var piecePosition = allPieces[i].getSquare();
-        if (piecePosition[0] == xSpace && piecePosition[1] == ySpace) {
-            return true;
-        }
-    }
-
-    return false;
-}
 
